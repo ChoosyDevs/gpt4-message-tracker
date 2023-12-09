@@ -1,0 +1,28 @@
+{
+    "manifest_version": 2,
+    "name": "GPT-4 Request Tracker",
+    "version": "1.0",
+    "description": "Track the number of requests sent to GPT-4",
+    "permissions": [
+        "webRequest",
+        "webRequestBlocking",
+        "storage",
+        "<all_urls>"
+    ],
+    "browser_action": {
+        "default_icon": "chatgpt-logo-chat-gpt-icon-on-white-background-free-vector.jpeg"
+    },
+    "action": {
+        "default_icon": "chatgpt-logo-chat-gpt-icon-on-white-background-free-vector.jpeg"
+    },
+    "background": {
+        "scripts": [
+            "background.js"
+        ],
+        "persistent": true
+    },
+    "icons": {
+        "48": "chatgpt-logo-chat-gpt-icon-on-white-background-free-vector.jpeg"
+
+    }
+}
