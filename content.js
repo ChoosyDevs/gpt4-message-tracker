@@ -4,7 +4,7 @@ function injectSquare() {
 
     if (targetDiv) {
         const square = document.createElement('div');
-        square.style.width = '50px';
+        square.style.width = '60px';
         square.style.height = '100%';
         square.style.backgroundColor = 'transparent';
         square.style.position = 'absolute';
@@ -19,7 +19,7 @@ function injectSquare() {
            
 
 
-        // Add text container inside the square
+       // Add text container inside the square
         const textContainer = document.createElement('div');
         textContainer.id = 'squareText';
         textContainer.style.display = 'flex';
@@ -27,12 +27,20 @@ function injectSquare() {
         textContainer.style.justifyContent = 'center';
         textContainer.style.height = '100%';
         textContainer.style.color = 'white'; // Assuming the send button is black
-         // Retrieve the current count from local storage and set it as the initial text
-         chrome.storage.local.get(['request_count'], function(result) {
-            const currentCount = result.request_count;
-            textContainer.textContent = currentCount.toString() + "/40";
-        });
 
+        // Initialize with a default text such as 'Loading...' to avoid showing 'NaN'
+        textContainer.textContent = '';
+
+        chrome.storage.local.get(['request_count'], function(result) {
+            const currentCount = result.request_count;
+            // Ensure that currentCount is a number before updating the text
+            if (!isNaN(currentCount)) {
+                textContainer.textContent = (40 - currentCount).toString() + " left";
+            } else {
+                // Handle the case where currentCount is not a number
+                textContainer.textContent = '';
+            }
+        });
 
 
         square.appendChild(textContainer);
@@ -45,7 +53,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.updateBadge) {
         const textContainer = document.getElementById('squareText');
         if (textContainer) {
-            textContainer.textContent = request.updateBadge.toString() + "/40";
+            textContainer.textContent = (40 - request.updateBadge).toString() + " left";
         }
     }
 });

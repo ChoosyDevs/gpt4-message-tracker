@@ -20,7 +20,7 @@ function checkAndReset() {
         localStorage.setItem('request_count', 0);
     }
        
-    chrome.browserAction.setBadgeText({text: requestCount.toString() + "/" + max_num_requests.toString()});
+    // chrome.browserAction.setBadgeText({text: requestCount.toString() + "/" + max_num_requests.toString()});
     updateBadgeCount(requestCount);
 }
 
@@ -47,7 +47,7 @@ function trackGPT4Request(details) {
         localStorage.setItem('request_count', requestCount);
 
         console.log("GPT-4 request count incremented:", requestCount);
-        chrome.browserAction.setBadgeText({text: requestCount.toString() + "/" + max_num_requests.toString()});
+        // chrome.browserAction.setBadgeText({text: requestCount.toString() + "/" + max_num_requests.toString()});
         updateBadgeCount(requestCount);
     }
 }
