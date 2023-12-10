@@ -57,6 +57,21 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
 });
 
+// Function to get the GPT version from the UI
+function getGPTVersion() {
+    let gptVersion = document.getElementsByClassName(
+        "text-token-text-secondary"
+    );
+
+    if (gptVersion.length > 0) {
+        gptVersion = gptVersion[0].textContent;
+    } else {
+        gptVersion = "3.5";
+    }
+
+    return gptVersion;
+}
+
 // Call the injectSquare function when the DOM is fully loaded
 if (
     document.readyState === "complete" ||
@@ -66,3 +81,11 @@ if (
 } else {
     document.addEventListener("DOMContentLoaded", injectSquare);
 }
+
+// Check for changes in the GPT version every 5 seconds
+setInterval(function () {
+    gptVersion = getGPTVersion();
+    if (gptVersion !== "3.5") {
+        injectSquare();
+    }
+}, 100);

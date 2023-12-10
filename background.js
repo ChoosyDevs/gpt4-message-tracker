@@ -1,3 +1,5 @@
+const { getGptVersion } = require("./utility-functions.js");
+
 // Initialize global variables
 let windowDuration = 3 * 60 * 60 * 1000; // 3 hours
 let max_num_requests = 40;
