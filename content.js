@@ -22,7 +22,7 @@ function injectSquare(remove = false) {
 
         square.style.width = "70px";
         square.style.height = "100%";
-        square.style.backgroundColor = "transparent";
+        square.style.service_workerColor = "transparent";
         square.style.position = "absolute";
         square.style.left = "100%"; // Position to the right of the target div
         square.style.bottom = "0";
@@ -45,6 +45,7 @@ function injectSquare(remove = false) {
         textContainer.textContent = "";
 
         chrome.storage.local.get(["request_count"], function (result) {
+            console.log("injectSquare results:", result);
             const currentCount = result.request_count;
             // Ensure that currentCount is a number before updating the text
             if (!isNaN(currentCount)) {
@@ -88,19 +89,8 @@ const observer = new MutationObserver(() => {
             injectSquare(true);
         }
     }
-
-    // Do something with the current URL, e.g., send it to your extension background script.
-    // chrome.runtime.sendMessage({ url: currentUrl });
 });
 
 observer.observe(document, { childList: true, subtree: true });
 
-// Call the injectSquare function when the DOM is fully loaded
-// if (
-//     document.readyState === "complete" ||
-//     document.readyState === "interactive"
-// ) {
-//     injectSquare();
-// } else {
-//     document.addEventListener("DOMContentLoaded", injectSquare);
-// }
+
