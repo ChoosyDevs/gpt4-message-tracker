@@ -81,11 +81,3 @@ if (
 } else {
     document.addEventListener("DOMContentLoaded", injectSquare);
 }
-
-// Check for changes in the GPT version every 5 seconds
-setInterval(function () {
-    gptVersion = getGPTVersion();
-    if (gptVersion !== "3.5") {
-        injectSquare();
-    }
-}, 100);
