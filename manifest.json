@@ -7,6 +7,8 @@
         "webRequest",
         "webRequestBlocking",
         "storage",
+        "activeTab",
+        "scripting",
         "<all_urls>"
     ],
     "browser_action": {
@@ -16,13 +18,16 @@
         "default_icon": "chatgpt-logo-chat-gpt-icon-on-white-background-free-vector.jpeg"
     },
     "background": {
-        "scripts": [
-            "background.js"
-        ],
+        "scripts": ["background.js"],
         "persistent": true
     },
     "icons": {
         "48": "chatgpt-logo-chat-gpt-icon-on-white-background-free-vector.jpeg"
-
-    }
+    },
+    "content_scripts": [
+        {
+            "matches": ["https://*.openai.com/*"],
+            "js": ["content.js"]
+        }
+    ]
 }
