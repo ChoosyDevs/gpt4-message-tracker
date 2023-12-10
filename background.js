@@ -1,5 +1,5 @@
 // Initialize global variables
-let windowDuration = 60 * 1000; // 1 min
+let windowDuration = 3 * 60 * 60 * 1000; // 3 hours
 let max_num_requests = 40;
 
 // Function to reset the request count if the current time exceeds the window duration
@@ -31,6 +31,16 @@ function checkAndReset() {
     chrome.browserAction.setBadgeText({
         text: requestCount.toString() + "/" + max_num_requests.toString(),
     });
+    updateBadgeCount(requestCount);
+}
+
+// Function to send the current count to the content script
+function updateBadgeCount(newCount) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        if (tabs[0] && tabs[0].id) {
+            chrome.tabs.sendMessage(tabs[0].id, { updateBadge: newCount });
+        }
+    });
 }
 
 // Function to track GPT-4 requests and increment the request count
@@ -51,6 +61,7 @@ function trackGPT4Request(details) {
         chrome.browserAction.setBadgeText({
             text: requestCount.toString() + "/" + max_num_requests.toString(),
         });
+        updateBadgeCount(requestCount);
     }
 }
 

@@ -7,22 +7,33 @@
         "webRequest",
         "webRequestBlocking",
         "storage",
+        "activeTab",
+        "scripting",
         "<all_urls>"
     ],
+    "icons": {
+        "16": "assets/16x16.png",
+        "48": "assets/48x48.png",
+        "128": "assets/128x128.png"
+    },
     "browser_action": {
-        "default_icon": "chatgpt-logo-chat-gpt-icon-on-white-background-free-vector.jpeg"
+        "default_icon": "assets/16x16.png"
     },
     "action": {
-        "default_icon": "chatgpt-logo-chat-gpt-icon-on-white-background-free-vector.jpeg"
+        "icons": {
+            "16": "assets/16x16.png",
+            "48": "assets/48x48.png",
+            "128": "assets/128x128.png"
+        }
     },
     "background": {
-        "scripts": [
-            "background.js"
-        ],
+        "scripts": ["background.js"],
         "persistent": true
     },
-    "icons": {
-        "48": "chatgpt-logo-chat-gpt-icon-on-white-background-free-vector.jpeg"
-
-    }
+    "content_scripts": [
+        {
+            "matches": ["https://*.openai.com/*"],
+            "js": ["content.js"]
+        }
+    ]
 }
