@@ -1,11 +1,26 @@
 // This is an example and may need adjustments based on the actual ChatGPT UI
-function injectSquare() {
+function injectSquare(remove = false) {
+    if (remove) {
+        const squareOutline = document.getElementById("squareOutline");
+        if (squareOutline) {
+            squareOutline.remove();
+        }
+
+        const squareText = document.getElementById("squareText");
+        if (squareText) {
+            squareText.remove();
+        }
+        return;
+    }
+
     const targetDiv = document.querySelector(
         "#__next > div.relative.z-0.flex.h-full.w-full.overflow-hidden > div.relative.flex.h-full.max-w-full.flex-1.flex-col.overflow-hidden > main > div.flex.h-full.flex-col > div.w-full.pt-2.md\\:pt-0.dark\\:border-white\\/20.md\\:border-transparent.md\\:dark\\:border-transparent.md\\:w-\\[calc\\(100\\%-\\.5rem\\)\\] > form > div"
     );
     if (targetDiv) {
         const square = document.createElement("div");
-        square.style.width = "60px";
+        square.id = "squareOutline";
+
+        square.style.width = "70px";
         square.style.height = "100%";
         square.style.backgroundColor = "transparent";
         square.style.position = "absolute";
@@ -14,7 +29,7 @@ function injectSquare() {
         square.style.marginLeft = "10px";
         square.style.maxHeight = "52px";
         square.style.border = "1px solid #555561";
-        square.style.borderRadius = "25%"; // If the send button is rounded
+        square.style.borderRadius = "22%"; // If the send button is rounded
         square.style.boxShadow = "0 2px 6px rgba(0,0,0,0.05)"; // Example shadow
         square.style.fontSize = "1rem";
 
@@ -57,27 +72,35 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
 });
 
-// Function to get the GPT version from the UI
-function getGPTVersion() {
-    let gptVersion = document.getElementsByClassName(
-        "text-token-text-secondary"
-    );
+// content.js
+const observer = new MutationObserver(() => {
+    let gptVersion = document.querySelector("span.text-token-text-secondary");
 
-    if (gptVersion.length > 0) {
-        gptVersion = gptVersion[0].textContent;
-    } else {
-        gptVersion = "3.5";
+    if (gptVersion) {
+        gptVersion = gptVersion.textContent;
+
+        if (gptVersion !== "3.5" && !document.getElementById("squareText")) {
+            injectSquare();
+        } else if (
+            gptVersion === "3.5" &&
+            document.getElementById("squareText")
+        ) {
+            injectSquare(true);
+        }
     }
 
-    return gptVersion;
-}
+    // Do something with the current URL, e.g., send it to your extension background script.
+    // chrome.runtime.sendMessage({ url: currentUrl });
+});
+
+observer.observe(document, { childList: true, subtree: true });
 
 // Call the injectSquare function when the DOM is fully loaded
-if (
-    document.readyState === "complete" ||
-    document.readyState === "interactive"
-) {
-    injectSquare();
-} else {
-    document.addEventListener("DOMContentLoaded", injectSquare);
-}
+// if (
+//     document.readyState === "complete" ||
+//     document.readyState === "interactive"
+// ) {
+//     injectSquare();
+// } else {
+//     document.addEventListener("DOMContentLoaded", injectSquare);
+// }

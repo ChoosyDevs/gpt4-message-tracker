@@ -1,5 +1,3 @@
-const { getGptVersion } = require("./utility-functions.js");
-
 // Initialize global variables
 let windowDuration = 3 * 60 * 60 * 1000; // 3 hours
 let max_num_requests = 40;
@@ -48,17 +46,43 @@ function trackGPT4Request(details) {
     if (
         details.url.includes("https://chat.openai.com/backend-api/conversation")
     ) {
-        checkAndReset();
-        let requestCount = parseInt(localStorage.getItem("request_count"));
-        if (!requestCount) {
-            requestCount = 0;
+        // parse the request body
+        let requestBody = null;
+        if (
+            details &&
+            details.requestBody &&
+            details.requestBody.raw &&
+            details.requestBody.raw[0] &&
+            details.requestBody.raw[0].bytes
+        ) {
+            let rawBytes = details.requestBody.raw[0].bytes;
+            let jsonString = new TextDecoder("utf-8").decode(
+                new Uint8Array(rawBytes)
+            );
+            try {
+                requestBody = JSON.parse(jsonString);
+            } catch (e) {
+                console.error("Error parsing JSON: ", e);
+            }
+        } else {
+            console.error("Expected properties not found in details object");
         }
-        requestCount++;
-        localStorage.setItem("request_count", requestCount);
 
-        console.log("GPT-4 request count incremented:", requestCount);
-        // chrome.browserAction.setBadgeText({text: requestCount.toString() + "/" + max_num_requests.toString()});
-        updateBadgeCount(requestCount);
+        let model = requestBody && requestBody.model;
+
+        if (model.includes("gpt-4")) {
+            checkAndReset();
+            let requestCount = parseInt(localStorage.getItem("request_count"));
+            if (!requestCount) {
+                requestCount = 0;
+            }
+            requestCount++;
+            localStorage.setItem("request_count", requestCount);
+
+            console.log("GPT-4 request count incremented:", requestCount);
+            // chrome.browserAction.setBadgeText({text: requestCount.toString() + "/" + max_num_requests.toString()});
+            updateBadgeCount(requestCount);
+        }
     }
 }
 
@@ -68,6 +92,13 @@ chrome.webRequest.onBeforeRequest.addListener(
     { urls: ["https://chat.openai.com/backend-api/conversation"] },
     ["requestBody"]
 );
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.url) {
+        console.log("Current URL:", message.url);
+        // Perform your desired actions here when the URL changes.
+    }
+});
 
 // Set an interval to call checkAndReset function every SECOND
 setInterval(checkAndReset, 1 * 1000);
