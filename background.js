@@ -43,7 +43,6 @@ function updateBadgeCount(newCount) {
 
 // Function to track GPT-4 requests and increment the request count
 function trackGPT4Request(details) {
-    console.log("Request detected:", details.url);
     if (
         details.url.includes("https://chat.openai.com/backend-api/conversation")
     ) {

@@ -3,7 +3,6 @@ function injectSquare() {
     const targetDiv = document.querySelector(
         "#__next > div.relative.z-0.flex.h-full.w-full.overflow-hidden > div.relative.flex.h-full.max-w-full.flex-1.flex-col.overflow-hidden > main > div.flex.h-full.flex-col > div.w-full.pt-2.md\\:pt-0.dark\\:border-white\\/20.md\\:border-transparent.md\\:dark\\:border-transparent.md\\:w-\\[calc\\(100\\%-\\.5rem\\)\\] > form > div"
     );
-    console.log(targetDiv);
     if (targetDiv) {
         const square = document.createElement("div");
         square.style.width = "60px";
@@ -28,7 +27,6 @@ function injectSquare() {
         textContainer.style.height = "100%";
         textContainer.style.color = "white"; // Assuming the send button is black
 
-        // Initialize with a default text such as 'Loading...' to avoid showing 'NaN'
         textContainer.textContent = "";
 
         chrome.storage.local.get(["request_count"], function (result) {
@@ -49,7 +47,8 @@ function injectSquare() {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.updateBadge) {
+    if (request.updateBadge >= 0) {
+        console.log("Updating badge count to:", request.updateBadge);
         const textContainer = document.getElementById("squareText");
         if (textContainer) {
             textContainer.textContent =
