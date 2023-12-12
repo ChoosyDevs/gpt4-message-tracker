@@ -73,10 +73,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
 });
 
-// content.js
 const observer = new MutationObserver(() => {
     let gptVersion = document.querySelector("span.text-token-text-secondary");
-
+    let customGptEnabled = document.querySelector("div.flex.items-center.gap-2");
+    
     if (gptVersion) {
         gptVersion = gptVersion.textContent;
 
@@ -89,6 +89,12 @@ const observer = new MutationObserver(() => {
             injectSquare(true);
         }
     }
+    else if(customGptEnabled) {
+        if(!document.getElementById("squareText")) {
+            injectSquare();
+        } 
+    }
+
 });
 
 observer.observe(document, { childList: true, subtree: true });
