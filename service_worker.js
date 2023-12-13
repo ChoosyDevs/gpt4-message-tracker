@@ -6,7 +6,7 @@ let max_num_requests = 40;
 function checkAndReset() {
     chrome.storage.local.get(['first_message_timestamp', 'request_count'], function(data) {
         let firstMessageTimestamp = data.first_message_timestamp;
-        let requestCount = data.request_count || 0;
+        let requestCount = data.request_count;
 
         if (!firstMessageTimestamp) {
             chrome.storage.local.set({ 'first_message_timestamp': Date.now() });
@@ -57,7 +57,7 @@ function trackGPT4Request(details) {
         if (model && model.includes("gpt-4")) {
             chrome.storage.local.get(['request_count'], function(data) {
                 console.log("GPT-4 data:", data)
-                let requestCount = data.request_count || 0;
+                let requestCount = data.request_count;
                 requestCount++;
                 chrome.storage.local.set({ 'request_count': requestCount });
 
