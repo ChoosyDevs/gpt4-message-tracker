@@ -17,9 +17,12 @@ function checkAndReset() {
         console.log("Seconds till reset:", (windowDuration - timePassed) / 1000);
 
         if (timePassed > windowDuration) {
-            chrome.storage.local.set({ 'request_count': 0, 'first_message_timestamp': Date.now() });
-            console.log("Count reset. Next reset scheduled in 3 hours.");
-            requestCount = 0;
+            chrome.storage.local.set({ 'request_count': 0, 'first_message_timestamp': Date.now() }, function() {
+                console.log("Count reset. Next reset scheduled in 3 hours.");
+                requestCount = 0;
+                updateBadgeCount(requestCount);
+                return;
+            });
         }
 
         updateBadgeCount(requestCount);
@@ -56,11 +59,15 @@ function trackGPT4Request(details) {
         console.log("Model:", model);
         if (model && model.includes("gpt-4")) {
             chrome.storage.local.get(['request_count'], function(data) {
-                console.log("GPT-4 data:", data);
-                chrome.storage.local.set({ 'request_count': data.request_count + 1 }, function() {
-                    console.log("GPT-4 request count incremented:", data.request_count + 1);
-                    updateBadgeCount(data.request_count + 1);
-                });
+                try {
+                    console.log("GPT-4 data:", data);
+                    chrome.storage.local.set({ 'request_count': data.request_count + 1 }, function() {
+                        console.log("GPT-4 request count incremented:", data.request_count + 1);
+                        updateBadgeCount(data.request_count + 1);
+                    });
+                } catch (error) {
+                    console.error("An error occurred inside the if (model && model.includes...) block", error);
+                }
             });
         }
     }
