@@ -1,19 +1,17 @@
 {
     "manifest_version": 3,
-    "name": "GPT-4 Request Tracker",
+    "name": "ChatCap for GPT-4",
     "version": "1.0",
-    "description": "Track the number of requests sent to GPT-4",
+    "description": "Track the remaining number of requests sent to GPT-4",
     "permissions": [
-        "alarms", 
+        "alarms",
         "storage",
         "activeTab",
         "scripting",
         "tabs",
         "webRequest"
     ],
-    "host_permissions": [
-        "https://*.openai.com/*"
-    ],
+    "host_permissions": ["https://*.openai.com/*"],
     "icons": {
         "16": "assets/16x16.png",
         "48": "assets/48x48.png",
