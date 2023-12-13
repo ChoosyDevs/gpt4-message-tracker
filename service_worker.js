@@ -56,13 +56,11 @@ function trackGPT4Request(details) {
         console.log("Model:", model);
         if (model && model.includes("gpt-4")) {
             chrome.storage.local.get(['request_count'], function(data) {
-                console.log("GPT-4 data:", data)
-                let requestCount = data.request_count;
-                requestCount++;
-                chrome.storage.local.set({ 'request_count': requestCount });
-
-                console.log("GPT-4 request count incremented:", requestCount);
-                updateBadgeCount(requestCount);
+                console.log("GPT-4 data:", data);
+                chrome.storage.local.set({ 'request_count': data.request_count + 1 }, function() {
+                    console.log("GPT-4 request count incremented:", data.request_count + 1);
+                    updateBadgeCount(data.request_count + 1);
+                });
             });
         }
     }
