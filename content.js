@@ -49,8 +49,7 @@ function injectSquare(remove = false) {
             const currentCount = result.request_count;
             // Ensure that currentCount is a number before updating the text
             if (!isNaN(currentCount)) {
-                textContainer.textContent =
-                    (40 - currentCount).toString() + " left";
+                textContainer.textContent = Math.max(0, 40 - currentCount).toString() + " left";
             } else {
                 // Handle the case where currentCount is not a number
                 textContainer.textContent = "";
@@ -67,8 +66,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         console.log("Updating badge count to:", request.updateBadge);
         const textContainer = document.getElementById("squareText");
         if (textContainer) {
-            textContainer.textContent =
-                (40 - request.updateBadge).toString() + " left";
+            textContainer.textContent = Math.max(0, 40 - request.updateBadge).toString() + " left";
         }
     }
 });
