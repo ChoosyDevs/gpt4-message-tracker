@@ -49,10 +49,11 @@ function injectSquare(remove = false) {
             const currentCount = result.request_count;
             // Ensure that currentCount is a number before updating the text
             if (!isNaN(currentCount)) {
-                textContainer.textContent = Math.max(0, 40 - currentCount).toString() + " left";
+                textContainer.textContent =
+                    Math.max(0, 40 - currentCount).toString() + " left";
             } else {
                 // Handle the case where currentCount is not a number
-                textContainer.textContent = "";
+                textContainer.textContent = "? left";
             }
         });
 
@@ -62,19 +63,23 @@ function injectSquare(remove = false) {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if (request.updateBadge >= 0) {
+    console.log("Message received:", request);
+    if (request.updateBadge === 0 || request.updateBadge) {
         console.log("Updating badge count to:", request.updateBadge);
         const textContainer = document.getElementById("squareText");
         if (textContainer) {
-            textContainer.textContent = Math.max(0, 40 - request.updateBadge).toString() + " left";
+            textContainer.textContent =
+                Math.max(0, 40 - request.updateBadge).toString() + " left";
         }
     }
 });
 
 const observer = new MutationObserver(() => {
     let gptVersion = document.querySelector("span.text-token-text-secondary");
-    let customGptEnabled = document.querySelector("div.flex.items-center.gap-2");
-    
+    let customGptEnabled = document.querySelector(
+        "div.flex.items-center.gap-2"
+    );
+
     if (gptVersion) {
         gptVersion = gptVersion.textContent;
 
@@ -86,15 +91,11 @@ const observer = new MutationObserver(() => {
         ) {
             injectSquare(true);
         }
-    }
-    else if(customGptEnabled) {
-        if(!document.getElementById("squareText")) {
+    } else if (customGptEnabled) {
+        if (!document.getElementById("squareText")) {
             injectSquare();
-        } 
+        }
     }
-
 });
 
 observer.observe(document, { childList: true, subtree: true });
-
-
