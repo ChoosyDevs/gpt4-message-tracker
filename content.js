@@ -1,4 +1,6 @@
 // This is an example and may need adjustments based on the actual ChatGPT UI
+let windowDuration = 3 * 60 * 60 * 1000; // 3 hours
+
 function injectSquare(remove = false) {
     if (remove) {
         const squareOutline = document.getElementById("squareOutline");
@@ -44,18 +46,34 @@ function injectSquare(remove = false) {
 
         textContainer.textContent = "";
 
-        chrome.storage.local.get(["request_count"], function (result) {
-            console.log("injectSquare results:", result);
-            const currentCount = result.request_count;
-            // Ensure that currentCount is a number before updating the text
-            if (!isNaN(currentCount)) {
-                textContainer.textContent =
-                    Math.max(0, 40 - currentCount).toString() + " left";
-            } else {
-                // Handle the case where currentCount is not a number
-                textContainer.textContent = "? left";
+        chrome.storage.local.get(
+            ["request_count", "first_message_timestamp"],
+            function (result) {
+                const first_message_timestamp = result.first_message_timestamp;
+                let minutesLeft = null;
+
+                if (first_message_timestamp) {
+                    const timePassed = Date.now() - first_message_timestamp;
+                    minutesLeft = Math.floor(
+                        (windowDuration - timePassed) / 1000 / 60
+                    );
+                }
+
+                console.log("injectSquare results:", result);
+                const currentCount = result.request_count;
+                // Ensure that currentCount is a number before updating the text
+                if (!isNaN(currentCount)) {
+                    textContainer.textContent =
+                        Math.max(0, 40 - currentCount).toString() +
+                        " left, " +
+                        minutesLeft +
+                        " minutes left";
+                } else {
+                    // Handle the case where currentCount is not a number
+                    textContainer.textContent = "? left";
+                }
             }
-        });
+        );
 
         square.appendChild(textContainer);
         targetDiv.appendChild(square);
