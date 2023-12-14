@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "ChatCap for GPT-4",
     "version": "1.0",
-    "description": "Track the remaining number of requests sent to GPT-4",
+    "description": "Track remaining GPT-4 messages",
     "permissions": [
         "alarms",
         "storage",
