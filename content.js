@@ -48,7 +48,7 @@ function injectSquare(remove = false) {
         textContainer.style.alignItems = "center";
         textContainer.style.justifyContent = "center";
         textContainer.style.height = "100%";
-        textContainer.style.color = "white"; // Assuming the send button is black
+        textContainer.style.color = "#C5C5D2"; // Assuming the send button is black
 
         textContainer.textContent = "";
 
@@ -57,10 +57,8 @@ function injectSquare(remove = false) {
         timeLeft.id = "timeLeft";
         timeLeft.style.display = "flex";
         timeLeft.style.alignItems = "center";
-        // timeLeft.style.alignSelf = "center";
         timeLeft.style.justifyContent = "center";
         timeLeft.style.position = "absolute";
-        // timeLeft.style.bottom = "-28px";
         timeLeft.style.left = "-55%";
         timeLeft.style.padding = "8px";
         timeLeft.style.lineHeight = "1rem";

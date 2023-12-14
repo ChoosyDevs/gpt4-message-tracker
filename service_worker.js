@@ -34,9 +34,6 @@ function checkAndReset() {
                     return;
                 });
             }
-
-            // let requestCount = data.request_count;
-            // updateBadgeCount(requestCount);
         }
     );
 }
@@ -125,9 +122,8 @@ function trackGPT4Request(details) {
     }
 }
 
-// Set up a chrome alarm to periodically execute checkAndReset
-
-chrome.alarms.create("updateTime", { periodInMinutes: 0.05 });
+// Set up a chrome alarm to periodically
+chrome.alarms.create("updateTime", { periodInMinutes: 0.1 });
 chrome.alarms.create("resetAlarm", { periodInMinutes: 0.01 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
@@ -137,7 +133,6 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     }
     if (alarm.name === "updateTime") {
         chrome.storage.local.get(["first_message_timestamp"], function (data) {
-            // TODO: check if error handling is needed here
             updateTimeLeft(data.first_message_timestamp);
         });
     }
@@ -149,13 +144,6 @@ chrome.webRequest.onBeforeRequest.addListener(
     { urls: ["https://chat.openai.com/backend-api/conversation"] },
     ["requestBody"]
 );
-
-// Listener for messages from content scripts or other parts of your extension
-// chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-//     if (message.url) {
-//         console.log("Current URL:", message.url);
-//     }
-// });
 
 // Initial setup
 checkAndReset();
