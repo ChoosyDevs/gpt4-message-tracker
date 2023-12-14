@@ -72,7 +72,6 @@ function injectSquare(remove = false) {
         chrome.storage.local.get(
             ["request_count", "first_message_timestamp"],
             function (result) {
-                console.log("injectSquare results:", result);
 
                 let minutesLeft = calculateMinutesLeft(
                     result.first_message_timestamp
@@ -96,12 +95,10 @@ function injectSquare(remove = false) {
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    console.log("Message received:", request);
     if (
         request.actionType === "updateCount" &&
         (request.newCount === 0 || request.newCount)
     ) {
-        console.log("Updating newCount to:", request.newCount);
         const textContainer = document.getElementById("squareText");
         if (textContainer) {
             textContainer.textContent = generateCountContent(request.newCount);
@@ -110,10 +107,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         request.actionType === "updateTime" &&
         request.firstMessageTimestamp
     ) {
-        console.log(
-            "Updating firstMessageTimestamp to:",
-            request.firstMessageTimestamp
-        );
         const timeLeftContainer = document.getElementById("timeLeft");
         if (timeLeftContainer) {
             let minutesLeft = calculateMinutesLeft(
