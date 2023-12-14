@@ -49,25 +49,16 @@ function injectSquare(remove = false) {
         chrome.storage.local.get(
             ["request_count", "first_message_timestamp"],
             function (result) {
-                const first_message_timestamp = result.first_message_timestamp;
-                let minutesLeft = null;
-
-                if (first_message_timestamp) {
-                    const timePassed = Date.now() - first_message_timestamp;
-                    minutesLeft = Math.floor(
-                        (windowDuration - timePassed) / 1000 / 60
-                    );
-                }
-
                 console.log("injectSquare results:", result);
+               
+                console.log("first_message_timestamp:", result.first_message_timestamp);
+                let minutesLeft = calculateMinutesLeft(result.first_message_timestamp);
+
                 const currentCount = result.request_count;
+                
                 // Ensure that currentCount is a number before updating the text
                 if (!isNaN(currentCount)) {
-                    textContainer.textContent =
-                        Math.max(0, 40 - currentCount).toString() +
-                        " left, " +
-                        minutesLeft +
-                        " minutes left";
+                    textContainer.textContent = generateTextContent(currentCount, minutesLeft);  
                 } else {
                     // Handle the case where currentCount is not a number
                     textContainer.textContent = "? left";
@@ -82,15 +73,44 @@ function injectSquare(remove = false) {
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     console.log("Message received:", request);
-    if (request.updateBadge === 0 || request.updateBadge) {
-        console.log("Updating badge count to:", request.updateBadge);
+    if (request.newCount === 0 || request.newCount) {
+        console.log("Updating newCount to:", request.newCount);
         const textContainer = document.getElementById("squareText");
         if (textContainer) {
-            textContainer.textContent =
-                Math.max(0, 40 - request.updateBadge).toString() + " left";
+            let minutesLeft = calculateMinutesLeft(request.first_message_timestamp);
+            textContainer.textContent = generateTextContent(request.newCount, minutesLeft);
         }
     }
 });
+
+
+function generateTextContent(currentCount, minutesLeft) {
+    if(!minutesLeft) {
+        return Math.max(0, 40 - currentCount).toString() + " left"
+    }
+    else return Math.max(0, 40 - currentCount).toString() + " left, " + minutesLeft + " minutes left";
+}
+
+
+function calculateMinutesLeft(first_message_timestamp) {
+    try {
+        if (!first_message_timestamp) {
+            throw new Error("Timestamp is not defined");
+        }
+
+        const timePassed = Date.now() - first_message_timestamp;
+        let minutesLeft = Math.floor((windowDuration - timePassed) / 1000 / 60);
+
+        if (minutesLeft < 0) {
+            throw new Error("Negative time is not allowed");
+        }
+
+        return minutesLeft;
+    } catch (error) {
+        console.error("An error occurred while calculating minutes left:", error);
+        return '';
+    }
+}
 
 const observer = new MutationObserver(() => {
     let gptVersion = document.querySelector("span.text-token-text-secondary");
