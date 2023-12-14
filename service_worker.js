@@ -45,7 +45,22 @@ function checkAndReset() {
 function updateBadgeCount(newCount) {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         if (tabs.length > 0 && tabs[0] && tabs[0].id) {
-            chrome.tabs.sendMessage(tabs[0].id, { newCount: newCount });
+            chrome.tabs.sendMessage(tabs[0].id, {
+                actionType: "updateCount",
+                newCount: newCount,
+            });
+        }
+    });
+}
+
+// Function to update the time left
+function updateTimeLeft(firstMessageTimestamp) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        if (tabs.length > 0 && tabs[0] && tabs[0].id) {
+            chrome.tabs.sendMessage(tabs[0].id, {
+                actionType: "updateTime",
+                firstMessageTimestamp: firstMessageTimestamp,
+            });
         }
     });
 }
@@ -111,11 +126,20 @@ function trackGPT4Request(details) {
 }
 
 // Set up a chrome alarm to periodically execute checkAndReset
+
+chrome.alarms.create("updateTime", { periodInMinutes: 0.05 });
 chrome.alarms.create("resetAlarm", { periodInMinutes: 0.01 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
+    console.log("Alarm triggered:", alarm);
     if (alarm.name === "resetAlarm") {
         checkAndReset();
+    }
+    if (alarm.name === "updateTime") {
+        chrome.storage.local.get(["first_message_timestamp"], function (data) {
+            // TODO: check if error handling is needed here
+            updateTimeLeft(data.first_message_timestamp);
+        });
     }
 });
 
