@@ -4,11 +4,9 @@ let max_num_requests = 40;
 
 // Function to reset the request count if the current time exceeds the window duration
 function checkAndReset() {
-    console.log("Checking and resetting request count...");
     chrome.storage.local.get(
         ["first_message_timestamp", "request_count"],
         function (data) {
-            console.log("Data in checkAndReset:", data);
             let firstMessageTimestamp = data.first_message_timestamp;
 
             if (!firstMessageTimestamp) {
@@ -19,10 +17,6 @@ function checkAndReset() {
             }
 
             const timePassed = Date.now() - firstMessageTimestamp;
-            console.log(
-                "Seconds till reset:",
-                (windowDuration - timePassed) / 1000
-            );
 
             if (timePassed > windowDuration) {
                 chrome.storage.local.set({ request_count: 0 }, function () {
@@ -64,7 +58,6 @@ function updateTimeLeft(firstMessageTimestamp) {
 
 // Function to track GPT-4 requests and increment the request count
 function trackGPT4Request(details) {
-    console.log("Tracking GPT-4 request details:", details);
     if (
         details.url.includes("https://chat.openai.com/backend-api/conversation")
     ) {
@@ -89,12 +82,11 @@ function trackGPT4Request(details) {
         }
 
         let model = requestBody && requestBody.model;
-        console.log("Model:", model);
+       
         // if model is not gpt 3.5
         if (model && !model.includes("text-davinci")) {
             chrome.storage.local.get(["request_count"], function (data) {
                 try {
-                    console.log("GPT-4 data:", data, typeof data.request_count);
                     chrome.storage.local.set(
                         {
                             request_count: data.request_count + 1,
@@ -104,10 +96,6 @@ function trackGPT4Request(details) {
                                     : data.first_message_timestamp,
                         },
                         function () {
-                            console.log(
-                                "GPT-4 request count incremented:",
-                                data.request_count + 1
-                            );
                             updateBadgeCount(data.request_count + 1);
                         }
                     );
@@ -127,7 +115,6 @@ chrome.alarms.create("updateTime", { periodInMinutes: 0.1 });
 chrome.alarms.create("resetAlarm", { periodInMinutes: 0.01 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
-    console.log("Alarm triggered:", alarm);
     if (alarm.name === "resetAlarm") {
         checkAndReset();
     }
@@ -147,4 +134,3 @@ chrome.webRequest.onBeforeRequest.addListener(
 
 // Initial setup
 checkAndReset();
-console.log("GPT-4 Request Tracker service worker script loaded and running.");
