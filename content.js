@@ -61,12 +61,12 @@ function injectSquare(remove = false) {
         timeLeft.style.justifyContent = "center";
         timeLeft.style.position = "absolute";
         // timeLeft.style.bottom = "-28px";
-        timeLeft.style.left = "-50%";
+        timeLeft.style.left = "-55%";
         timeLeft.style.padding = "8px";
         timeLeft.style.lineHeight = "1rem";
 
         timeLeft.style.fontSize = ".75rem";
-        timeLeft.style.width = "200%"; // Adjust as needed
+        timeLeft.style.width = "220%"; // Adjust as needed
         timeLeft.style.color = "#C5C5D2"; // Assuming the send button is black
 
         timeLeft.textContent = "";
@@ -136,7 +136,7 @@ function generatTimeContent(minutesLeft) {
     if (minutesLeft === "") {
         return "";
     }
-    return minutesLeft.toString() + " minutes left.";
+    return minutesLeft.toString() + " minutes till reset.";
 }
 
 function calculateMinutesLeft(first_message_timestamp) {
