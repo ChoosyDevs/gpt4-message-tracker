@@ -12,14 +12,14 @@
   <h3 align="center">ChatCap for GPT-4</h3>
 
   <p align="center">
-    The freshest mobile application for your photo polls!
+    A practical Chrome extension for precise tracking of your GPT-4 usage.
     <br />
     <br />
     <br />
   </p>
 </div>
 
-ChatCap for GPT-4 is a browser extension designed to track your usage with OpenAI's GPT-4 API. It adds a counter and timer directly into the ChatGPT UI, helping you manage your requests efficiently.
+ChatCap for GPT-4 is a browser extension designed to track your usage with OpenAI's GPT-4. It adds a counter and timer directly into the ChatGPT UI, helping you manage your requests efficiently.
 
 ## Features
 
