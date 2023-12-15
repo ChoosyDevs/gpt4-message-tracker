@@ -72,7 +72,6 @@ function injectSquare(remove = false) {
         chrome.storage.local.get(
             ["request_count", "first_message_timestamp"],
             function (result) {
-
                 let minutesLeft = calculateMinutesLeft(
                     result.first_message_timestamp
                 );

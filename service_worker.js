@@ -82,7 +82,7 @@ function trackGPT4Request(details) {
         }
 
         let model = requestBody && requestBody.model;
-       
+
         // if model is not gpt 3.5
         if (model && !model.includes("text-davinci")) {
             chrome.storage.local.get(["request_count"], function (data) {
