@@ -84,7 +84,7 @@ We use github to host code, to track issues and feature requests, as well as acc
 
 Apostolis Garos - [LinkedIn](https://www.linkedin.com/in/apostolis-garos/) - [apostolisgaros@gmail.com](mailto:apostolisgaros@gmail.com)
 
-Nick Vlachakis - [LinkedIn](https://www.linkedin.com/in/nikos-vlachakis/) - [nvlachakis1999@gmail.com](mailto:nvlachakis1999@gmail.com)
+Nikos Vlachakis - [LinkedIn](https://www.linkedin.com/in/nikos-vlachakis/) - [nvlachakis1999@gmail.com](mailto:nvlachakis1999@gmail.com)
 
 ## License
 
