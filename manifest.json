@@ -7,8 +7,6 @@
         "alarms",
         "storage",
         "activeTab",
-        "scripting",
-        "tabs",
         "webRequest"
     ],
     "host_permissions": ["https://*.openai.com/*"],
