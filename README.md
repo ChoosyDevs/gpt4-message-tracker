@@ -106,4 +106,4 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [instagram-shield]: https://img.shields.io/badge/-Instagram-black.svg?style=for-the-badge&logo=instagram&colorB=555
 [instagram-link]: https://www.instagram.com/choosy_app/
 [chrome-web-store-shield]: https://img.shields.io/badge/-Chrome_Web_Store-black.svg?style=for-the-badge&logo=googlechrome&colorB=555
-[chrome-web-store-link]: https://chromewebstore.google.com/?hl=el
+[chrome-web-store-link]: https://chromewebstore.google.com/detail/chatcap-for-gpt-4/ajcbdcobbgecebihnofalnjjeajneaja
